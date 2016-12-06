@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 public class RegisterActivity extends Activity {
 	SimpleTextInputCellFragment fragInputCellAccount;
+	SimpleTextInputCellFragment fragInputCellEmail;
 	SimpleTextInputCellFragment fragInputCellPassword;
 	SimpleTextInputCellFragment fragInputCellPasswordRepeat;
 
@@ -17,6 +18,7 @@ public class RegisterActivity extends Activity {
 		setContentView(R.layout.activity_register);
 
 		fragInputCellAccount = (SimpleTextInputCellFragment) getFragmentManager().findFragmentById(R.id.input_account);
+		fragInputCellEmail = (SimpleTextInputCellFragment)getFragmentManager().findFragmentById(R.id.input_email);
 		fragInputCellPassword = (SimpleTextInputCellFragment) getFragmentManager()
 				.findFragmentById(R.id.input_password);
 		fragInputCellPasswordRepeat = (SimpleTextInputCellFragment) getFragmentManager()
@@ -30,6 +32,8 @@ public class RegisterActivity extends Activity {
 
 		fragInputCellAccount.setLabelText("账户名");
 		fragInputCellAccount.setHintText("请输入用户名");
+		fragInputCellEmail.setLabelText("电子邮箱");
+		fragInputCellEmail.setHintText("请输入邮箱地址");
 		fragInputCellPassword.setLabelText("密码");
 		fragInputCellPassword.setHintText("请输入密码");
 		fragInputCellPassword.setIsPassword(true);
