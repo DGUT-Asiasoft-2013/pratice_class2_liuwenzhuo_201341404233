@@ -9,7 +9,7 @@ import android.view.View;
 
 public class LoginActivity extends Activity {
 
-	SimpleTextInputCellFragment fragAccount, fragPassword;
+	SimpleTextInputCellFragment fragAccount, fragPassword,forgetPassword;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +29,14 @@ public class LoginActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				goLogin();
+			}
+		});
+		findViewById(R.id.btn_forget_password).setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				goRecoverPassword();
 			}
 		});
 
@@ -55,6 +63,11 @@ public class LoginActivity extends Activity {
 
 	void goRegister() {
 		Intent itnt = new Intent(this, RegisterActivity.class);
+		startActivity(itnt);
+	}
+	
+	void goRecoverPassword(){
+		Intent itnt = new Intent(this,PasswordRecoverActivity.class);
 		startActivity(itnt);
 	}
 }
