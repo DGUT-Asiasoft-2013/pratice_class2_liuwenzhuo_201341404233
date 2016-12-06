@@ -1,8 +1,5 @@
 package com.example.helloworld.fragments.inputcells;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import com.example.helloworld.R;
 
 import android.app.Activity;
@@ -29,7 +26,6 @@ public class PictureInputCellFragment extends BaseInputCellFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.fragment_inputcell_picture, container);
 
 		imageView = (ImageView) view.findViewById(R.id.image);
@@ -37,87 +33,81 @@ public class PictureInputCellFragment extends BaseInputCellFragment {
 		hintText = (TextView) view.findViewById(R.id.hint);
 
 		imageView.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				onImageClickListener();
+				onImageViewClicked();
 			}
 		});
+
 		return view;
 	}
 
-	private void onImageClickListener() {
+	void onImageViewClicked(){
+		String[] items = {
+				"拍照",
+				"相册"
+		};
 
-		String[] items = { "拍照", "相册" };
+		new AlertDialog.Builder(getActivity())
+		.setTitle(hintText.getText())
+		.setItems(items, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+				case 0:
+					takePhoto();
+					break;
 
-		new AlertDialog.Builder(getActivity()).setTitle(labelText.getText())
-				.setItems(items, new DialogInterface.OnClickListener() {
+				case 1:
+					pickFromAlbum();
+					break;
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
-						switch (which) {
-						case 0:
-							takePhoto();
-							break;
-
-						case 1:
-							pickFromAlum();
-							break;
-
-						default:
-							break;
-
-						}
-					}
-				}).setNegativeButton("取消", null).show();
+				default:
+					break;
+				}
+			}
+		})
+		.setNegativeButton("取消", null)
+		.show();
 	}
 
-	void takePhoto() {
+	void takePhoto(){
 		Intent itnt = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		startActivityForResult(itnt, REQUESTCODE_CAMERA);
 	}
 
-	void pickFromAlum() {
-		Intent itnt = new Intent(Intent.ACTION_PICK);
+	void pickFromAlbum(){
+		Intent itnt = new Intent(Intent.ACTION_GET_CONTENT);
 		itnt.setType("image/*");
 		startActivityForResult(itnt, REQUESTCODE_ALBUM);
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == Activity.RESULT_CANCELED) {
-			return;
-		}
+		if(resultCode == Activity.RESULT_CANCELED) return;
 
-		if (requestCode == REQUESTCODE_CAMERA) {
-			Bitmap bmp = (Bitmap) data.getExtras().get("data");
+		if(requestCode == REQUESTCODE_CAMERA){
+
+			Bitmap bmp = (Bitmap)data.getExtras().get("data");
 			imageView.setImageBitmap(bmp);
-			// Log.d("camera data", dataObj.getClass().toString());
-			// Toast.makeText(getActivity(), data.getDataString(),
-			// Toast.LENGTH_LONG).show();
-		} else if (requestCode == REQUESTCODE_ALBUM) {
-
-//			Bitmap bmp = BitmapFactory.decodeFile(data.getDataString());
+		}else if(requestCode == REQUESTCODE_ALBUM){
+			
 			try {
 				Bitmap bmp = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
 				imageView.setImageBitmap(bmp);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	public void setLabelText(String labelText) {
+	@Override
+	public void setLabelText(String labelText){
 		this.labelText.setText(labelText);
 	}
 
-	public void setHintText(String hintText) {
-		this.hintText.setHint(hintText);
+	@Override
+	public void setHintText(String hintText){
+		this.hintText.setText(hintText);
 	}
 }
