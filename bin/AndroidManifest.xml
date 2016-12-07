@@ -34,8 +34,10 @@
         </activity>
         <activity android:name="com.example.helloworld.PasswordRecoverActivity" >
         </activity>
-        <activity 
-            android:name="com.example.helloworld.FeedContentActivity"></activity>
+        <activity android:name="com.example.helloworld.FeedContentActivity" >
+        </activity>
+        <activity android:name="com.example.helloworld.AddContentActivity" >
+        </activity>
     </application>
 
 </manifest>

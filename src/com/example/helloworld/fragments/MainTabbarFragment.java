@@ -1,11 +1,14 @@
 package com.example.helloworld.fragments;
 
+import com.example.helloworld.AddContentActivity;
 import com.example.helloworld.R;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 public class MainTabbarFragment extends Fragment {
@@ -22,6 +25,17 @@ public class MainTabbarFragment extends Fragment {
 		tabNotes = view.findViewById(R.id.tab_notes);
 		tabSearch = view.findViewById(R.id.tab_search);
 		tabMe = view.findViewById(R.id.tab_me);
+
+		btnNew.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent itnt = new Intent(getActivity(), AddContentActivity.class);
+				startActivity(itnt);
+				getActivity().overridePendingTransition(R.anim.slide_in_bottom, 0);
+			}
+		});
 
 		tabs = new View[] { tabFeeds, tabNotes, tabSearch, tabMe };
 
