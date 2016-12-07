@@ -1,12 +1,17 @@
 package com.example.helloworld.fragments.pages;
 
+import com.example.helloworld.FeedContentActivity;
 import com.example.helloworld.R;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,7 +19,15 @@ import android.widget.TextView;
 public class FeedsListFragment extends Fragment {
 
 	private View view;
-	ListView listView;
+	private ListView listView;
+	private String[] arrList = new String[34];
+	private int i;
+
+	private void addArrList() {
+		for (i = 0; i < arrList.length; i++) {
+			arrList[i] = new String(i + "");
+		}
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -23,9 +36,25 @@ public class FeedsListFragment extends Fragment {
 
 			listView = (ListView) view.findViewById(R.id.list);
 			listView.setAdapter(listAdapter);
+			listView.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					// TODO Auto-generated method stub
+					onItemSelected(position);
+				}
+			});
+			addArrList();
 		}
-		
+
 		return view;
+	}
+	
+	private void onItemSelected(int position){
+		String text = arrList[position];
+		Intent itnt = new Intent(getActivity(),FeedContentActivity.class);
+		itnt.putExtra("text", text);
+		startActivity(itnt);
 	}
 
 	BaseAdapter listAdapter = new BaseAdapter() {
@@ -43,7 +72,7 @@ public class FeedsListFragment extends Fragment {
 				view = convertView;
 			}
 			TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-			text1.setText("THIS IS ROW" + position);
+			text1.setText("THIS IS ROW" + arrList[position]);
 			return view;
 		}
 
@@ -56,13 +85,13 @@ public class FeedsListFragment extends Fragment {
 		@Override
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
-			return "";
+			return arrList[position];
 		}
 
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
-			return 20;
+			return arrList == null ? 0 : arrList.length;
 		}
 	};
 }
