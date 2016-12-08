@@ -37,7 +37,7 @@ public class BootActivity extends Activity {
 
 		OkHttpClient client = new OkHttpClient();
 
-		Request request = new Request.Builder().url("http://172.27.0.20:8080/membercenter/api/hello").method("GET", null)
+		Request request = new Request.Builder().url("http://119.29.254.43/hello.txt").method("GET", null)
 				.build();
 
 		client.newCall(request).enqueue(new Callback() {

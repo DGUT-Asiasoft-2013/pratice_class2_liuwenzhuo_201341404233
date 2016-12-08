@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -49,10 +48,10 @@ public class FeedsListFragment extends Fragment {
 
 		return view;
 	}
-	
-	private void onItemSelected(int position){
+
+	private void onItemSelected(int position) {
 		String text = arrList[position];
-		Intent itnt = new Intent(getActivity(),FeedContentActivity.class);
+		Intent itnt = new Intent(getActivity(), FeedContentActivity.class);
 		itnt.putExtra("text", text);
 		startActivity(itnt);
 	}
@@ -67,12 +66,12 @@ public class FeedsListFragment extends Fragment {
 			if (convertView == null) {
 
 				LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-				view = inflater.inflate(android.R.layout.simple_list_item_1, null);
+				view = inflater.inflate(R.layout.listview_item_feed, null);
 			} else {
 				view = convertView;
 			}
-			TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-			text1.setText("THIS IS ROW" + arrList[position]);
+			TextView tvName = (TextView) view.findViewById(R.id.tvName);
+			tvName.setText(arrList[position]);
 			return view;
 		}
 
