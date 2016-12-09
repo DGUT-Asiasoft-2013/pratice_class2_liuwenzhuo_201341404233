@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class SimpleTextInputCellFragment extends BaseInputCellFragment {
-	
+
 	TextView label;
 	EditText edit;
 
@@ -23,22 +23,27 @@ public class SimpleTextInputCellFragment extends BaseInputCellFragment {
 		edit = (EditText) view.findViewById(R.id.edit);
 		return view;
 	}
-	
+
 	@Override
-	public void setLabelText(String labelText){
+	public void setLabelText(String labelText) {
 		label.setText(labelText);
 	}
-	
+
 	@Override
-	public void setHintText(String hintText){
+	public void setHintText(String hintText) {
 		edit.setHint(hintText);
 	}
-	
-	public void setIsPassword(boolean isPassword){
-		if(isPassword){
-			edit.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);	
-		}else{
+
+	public String getText() {
+		String text = edit.getText().toString();
+		return text;
+	}
+
+	public void setIsPassword(boolean isPassword) {
+		if (isPassword) {
+			edit.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+		} else {
 			edit.setInputType(InputType.TYPE_CLASS_TEXT);
-		}		
+		}
 	}
 }
