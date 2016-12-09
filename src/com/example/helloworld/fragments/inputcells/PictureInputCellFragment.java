@@ -1,5 +1,7 @@
 package com.example.helloworld.fragments.inputcells;
 
+import java.io.ByteArrayOutputStream;
+
 import com.example.helloworld.R;
 
 import android.app.Activity;
@@ -7,6 +9,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -23,6 +26,7 @@ public class PictureInputCellFragment extends BaseInputCellFragment {
 	ImageView imageView;
 	TextView labelText;
 	TextView hintText;
+	byte[] pngData;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,6 +86,11 @@ public class PictureInputCellFragment extends BaseInputCellFragment {
 		startActivityForResult(itnt, REQUESTCODE_ALBUM);
 	}
 
+	void saveBitmap(Bitmap bmp){
+		ByteArrayOutputStream bStream = new ByteArrayOutputStream();
+		bmp.compress(CompressFormat.PNG, 100, bStream);
+		pngData = bStream.toByteArray();
+	}
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode == Activity.RESULT_CANCELED) return;

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -24,6 +25,7 @@ public class RegisterActivity extends Activity {
 	SimpleTextInputCellFragment fragInputCellPassword;
 	SimpleTextInputCellFragment fragInputCellPasswordRepeat;
 	SimpleTextInputCellFragment fragInputCellName;
+	SimpleTextInputCellFragment fragInputAvatar;
 	ProgressDialog progressDialog;
 
 	@Override
@@ -39,6 +41,7 @@ public class RegisterActivity extends Activity {
 				.findFragmentById(R.id.input_password);
 		fragInputCellPasswordRepeat = (SimpleTextInputCellFragment) getFragmentManager()
 				.findFragmentById(R.id.input_password_repeat);
+		fragInputAvatar = (SimpleTextInputCellFragment) getFragmentManager().findFragmentById(R.id.input_avatar);
 
 		findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener() {
 
@@ -105,11 +108,27 @@ public class RegisterActivity extends Activity {
 		
 		OkHttpClient client = new OkHttpClient();
 
-		RequestBody body = new MultipartBody.Builder().addFormDataPart("account", account).addFormDataPart("name", name)
-				.addFormDataPart("email", email).addFormDataPart("password", password).build();
+		MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder()
+				.setType(MultipartBody.FORM)
+				.addFormDataPart("account", account)
+				.addFormDataPart("name", name)
+				.addFormDataPart("email", email)
+				.addFormDataPart("password", password);
 
-		Request request = new Request.Builder().url("http://172.27.0.20:8080/membercenter/api/register")
-				.method("GET", null).post(body).build();
+		if(fragInputAvatar.getPngData()!=null){
+			requestBodyBuilder
+			.addFormDataPart(
+					"avatar",
+					"avatar",
+					RequestBody
+					.create(MediaType.parse("image/png"),
+							fragInputAvatar.getPngData()));
+		}
+		Request request = new Request.Builder()
+				.url("http://172.27.165.244:8080/membercenter/api/register")
+				.method("post", null)
+				.post(requestBodyBuilder.build())
+				.build();
 
 		client.newCall(request).enqueue(new Callback() {
 

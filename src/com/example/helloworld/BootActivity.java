@@ -37,7 +37,7 @@ public class BootActivity extends Activity {
 
 		OkHttpClient client = new OkHttpClient();
 
-		Request request = new Request.Builder().url("http://172.27.0.20:8080/membercenter/api/hello").method("GET", null)
+		Request request = new Request.Builder().url("http://172.27.165.244:8080/membercenter/api/hello").method("GET", null)
 				.build();
 
 		client.newCall(request).enqueue(new Callback() {
@@ -71,6 +71,7 @@ public class BootActivity extends Activity {
 					public void run() {
 						// TODO Auto-generated method stub
 						Toast.makeText(BootActivity.this, arg1.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+						startLoginActivity();
 					}
 				});
 			}

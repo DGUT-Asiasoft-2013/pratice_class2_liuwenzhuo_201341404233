@@ -14,6 +14,7 @@ public class SimpleTextInputCellFragment extends BaseInputCellFragment {
 
 	TextView label;
 	EditText edit;
+	byte[] pngData;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,6 +38,10 @@ public class SimpleTextInputCellFragment extends BaseInputCellFragment {
 	public String getText() {
 		String text = edit.getText().toString();
 		return text;
+	}
+	
+	public byte[] getPngData(){
+		return pngData;
 	}
 
 	public void setIsPassword(boolean isPassword) {
