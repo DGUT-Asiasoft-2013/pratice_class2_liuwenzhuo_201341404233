@@ -14,7 +14,6 @@ public class SimpleTextInputCellFragment extends BaseInputCellFragment {
 
 	TextView label;
 	EditText edit;
-	byte[] pngData;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,10 +39,6 @@ public class SimpleTextInputCellFragment extends BaseInputCellFragment {
 		return text;
 	}
 	
-	public byte[] getPngData(){
-		return pngData;
-	}
-
 	public void setIsPassword(boolean isPassword) {
 		if (isPassword) {
 			edit.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);

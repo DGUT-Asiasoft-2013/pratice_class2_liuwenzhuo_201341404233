@@ -2,6 +2,7 @@ package com.example.helloworld;
 
 import java.io.IOException;
 
+import com.example.helloworld.fragments.inputcells.PictureInputCellFragment;
 import com.example.helloworld.fragments.inputcells.SimpleTextInputCellFragment;
 
 import android.app.Activity;
@@ -25,7 +26,7 @@ public class RegisterActivity extends Activity {
 	SimpleTextInputCellFragment fragInputCellPassword;
 	SimpleTextInputCellFragment fragInputCellPasswordRepeat;
 	SimpleTextInputCellFragment fragInputCellName;
-	SimpleTextInputCellFragment fragInputAvatar;
+	PictureInputCellFragment fragInputAvatar;
 	ProgressDialog progressDialog;
 
 	@Override
@@ -41,7 +42,7 @@ public class RegisterActivity extends Activity {
 				.findFragmentById(R.id.input_password);
 		fragInputCellPasswordRepeat = (SimpleTextInputCellFragment) getFragmentManager()
 				.findFragmentById(R.id.input_password_repeat);
-		fragInputAvatar = (SimpleTextInputCellFragment) getFragmentManager().findFragmentById(R.id.input_avatar);
+		fragInputAvatar = (PictureInputCellFragment) getFragmentManager().findFragmentById(R.id.input_avatar);
 
 		findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener() {
 
@@ -100,35 +101,26 @@ public class RegisterActivity extends Activity {
 			return;
 		}
 
+		password = MD5.getMD5(password);
+
 		String account = fragInputCellAccount.getText();
 		String name = fragInputCellName.getText();
 		String email = fragInputEmailAddress.getText();
 
 		progressDialog.show();
-		
+
 		OkHttpClient client = new OkHttpClient();
 
-		MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder()
-				.setType(MultipartBody.FORM)
-				.addFormDataPart("account", account)
-				.addFormDataPart("name", name)
-				.addFormDataPart("email", email)
+		MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM)
+				.addFormDataPart("account", account).addFormDataPart("name", name).addFormDataPart("email", email)
 				.addFormDataPart("password", password);
 
-		if(fragInputAvatar.getPngData()!=null){
-			requestBodyBuilder
-			.addFormDataPart(
-					"avatar",
-					"avatar",
-					RequestBody
-					.create(MediaType.parse("image/png"),
-							fragInputAvatar.getPngData()));
+		if (fragInputAvatar.getPngData() != null) {
+			requestBodyBuilder.addFormDataPart("avatar", "avatar",
+					RequestBody.create(MediaType.parse("image/png"), fragInputAvatar.getPngData()));
 		}
-		Request request = new Request.Builder()
-				.url("http://172.27.165.244:8080/membercenter/api/register")
-				.method("post", null)
-				.post(requestBodyBuilder.build())
-				.build();
+		Request request = new Request.Builder().url("http://172.27.165.244:8080/membercenter/api/register")
+				.method("post", null).post(requestBodyBuilder.build()).build();
 
 		client.newCall(request).enqueue(new Callback() {
 
@@ -157,8 +149,7 @@ public class RegisterActivity extends Activity {
 		progressDialog.dismiss();
 		try {
 			new AlertDialog.Builder(this).setTitle("请求成功").setMessage(response.body().string())
-			.setNegativeButton("确定", null)
-			.show();
+					.setNegativeButton("确定", null).show();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -167,7 +158,8 @@ public class RegisterActivity extends Activity {
 	}
 
 	private void onFailure(Call arg0, IOException arg1) {
-			progressDialog.dismiss();
-			new AlertDialog.Builder(this).setTitle("请求失败").setMessage("Error").show();
+		progressDialog.dismiss();
+		new AlertDialog.Builder(this).setTitle("请求失败").setMessage(arg1.getLocalizedMessage())
+				.setNegativeButton("好", null).show();
 	}
 }

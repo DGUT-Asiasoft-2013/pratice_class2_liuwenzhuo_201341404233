@@ -46,63 +46,61 @@ public class PictureInputCellFragment extends BaseInputCellFragment {
 		return view;
 	}
 
-	void onImageViewClicked(){
-		String[] items = {
-				"拍照",
-				"相册"
-		};
+	void onImageViewClicked() {
+		String[] items = { "拍照", "相册" };
 
-		new AlertDialog.Builder(getActivity())
-		.setTitle(hintText.getText())
-		.setItems(items, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				switch (which) {
-				case 0:
-					takePhoto();
-					break;
+		new AlertDialog.Builder(getActivity()).setTitle(hintText.getText())
+				.setItems(items, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						switch (which) {
+						case 0:
+							takePhoto();
+							break;
 
-				case 1:
-					pickFromAlbum();
-					break;
+						case 1:
+							pickFromAlbum();
+							break;
 
-				default:
-					break;
-				}
-			}
-		})
-		.setNegativeButton("取消", null)
-		.show();
+						default:
+							break;
+						}
+					}
+				}).setNegativeButton("取消", null).show();
 	}
 
-	void takePhoto(){
+	void takePhoto() {
 		Intent itnt = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		startActivityForResult(itnt, REQUESTCODE_CAMERA);
 	}
 
-	void pickFromAlbum(){
+	void pickFromAlbum() {
 		Intent itnt = new Intent(Intent.ACTION_GET_CONTENT);
 		itnt.setType("image/*");
 		startActivityForResult(itnt, REQUESTCODE_ALBUM);
 	}
 
-	void saveBitmap(Bitmap bmp){
-		ByteArrayOutputStream bStream = new ByteArrayOutputStream();
-		bmp.compress(CompressFormat.PNG, 100, bStream);
-		pngData = bStream.toByteArray();
+	void saveBitmap(Bitmap bmp) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		bmp.compress(CompressFormat.PNG, 100, baos);
+		pngData = baos.toByteArray();
 	}
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(resultCode == Activity.RESULT_CANCELED) return;
+		if (resultCode == Activity.RESULT_CANCELED)
+			return;
 
-		if(requestCode == REQUESTCODE_CAMERA){
+		if (requestCode == REQUESTCODE_CAMERA) {
 
-			Bitmap bmp = (Bitmap)data.getExtras().get("data");
+			Bitmap bmp = (Bitmap) data.getExtras().get("data");
+			saveBitmap(bmp);
 			imageView.setImageBitmap(bmp);
-		}else if(requestCode == REQUESTCODE_ALBUM){
-			
+		} else if (requestCode == REQUESTCODE_ALBUM) {
+
 			try {
 				Bitmap bmp = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
+				saveBitmap(bmp);
 				imageView.setImageBitmap(bmp);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -111,12 +109,16 @@ public class PictureInputCellFragment extends BaseInputCellFragment {
 	}
 
 	@Override
-	public void setLabelText(String labelText){
+	public void setLabelText(String labelText) {
 		this.labelText.setText(labelText);
 	}
 
 	@Override
-	public void setHintText(String hintText){
+	public void setHintText(String hintText) {
 		this.hintText.setText(hintText);
 	}
+	
+	public byte[] getPngData(){
+				return pngData;
+			}
 }
