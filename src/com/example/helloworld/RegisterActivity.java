@@ -2,8 +2,10 @@ package com.example.helloworld;
 
 import java.io.IOException;
 
+import com.example.helloworld.entity.User;
 import com.example.helloworld.fragments.inputcells.PictureInputCellFragment;
 import com.example.helloworld.fragments.inputcells.SimpleTextInputCellFragment;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -123,19 +125,39 @@ public class RegisterActivity extends Activity {
 				.method("post", null).post(requestBodyBuilder.build()).build();
 
 		client.newCall(request).enqueue(new Callback() {
-			
 
 			@Override
 			public void onResponse(final Call arg0, final Response arg1) throws IOException {
 				// TODO Auto-generated method stub
-				runOnUiThread(new Runnable() {
+				String jsonString = arg1.body().string();
+				ObjectMapper mapper = new ObjectMapper();
+				User user = null;
 
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						RegisterActivity.this.onResponse(arg0, arg1);
+				try {
+					user = mapper.readValue(jsonString, User.class);
+					if (user != null) {
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								RegisterActivity.this.onResponse(arg0, arg1);
+							}
+						});
 					}
-				});
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					runOnUiThread(new Runnable() {
+
+						@Override
+						public void run() {
+							Toast.makeText(RegisterActivity.this, "数据解析异常", Toast.LENGTH_SHORT).show();
+							progressDialog.dismiss();
+						}
+					});
+					return;
+				}
+
 			}
 
 			@Override
@@ -143,6 +165,7 @@ public class RegisterActivity extends Activity {
 				// TODO Auto-generated method stub
 				RegisterActivity.this.onFailure(arg0, arg1);
 			}
+
 		});
 	}
 

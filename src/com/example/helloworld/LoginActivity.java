@@ -2,26 +2,28 @@ package com.example.helloworld;
 
 import java.io.IOException;
 
+import com.example.helloworld.entity.User;
 import com.example.helloworld.fragments.inputcells.SimpleTextInputCellFragment;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class LoginActivity extends Activity {
 	SimpleTextInputCellFragment fragAccount, fragPassword;
 	ProgressDialog progressDialog;
+	User user = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,60 +82,78 @@ public class LoginActivity extends Activity {
 		String account = fragAccount.getText();
 		String password = fragPassword.getText();
 		progressDialog.show();
-		
+
 		OkHttpClient client = new OkHttpClient();
-		
+
 		MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM)
-				.addFormDataPart("account", account)
-				.addFormDataPart("password", MD5.getMD5(password));
-		
+				.addFormDataPart("account", account).addFormDataPart("password", MD5.getMD5(password));
+
 		Request request = new Request.Builder().url("http://172.27.0.20:8080/membercenter/api/login")
 				.method("get", null).post(requestBodyBuilder.build()).build();
-		
+
 		client.newCall(request).enqueue(new Callback() {
-			
+
 			@Override
 			public void onResponse(final Call arg0, final Response arg1) throws IOException {
 				// TODO Auto-generated method stub
-				runOnUiThread(new Runnable() {
-					
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
+				String jsonString = arg1.body().string();
+				ObjectMapper mapper = new ObjectMapper();
+
+				try {
+					user = mapper.readValue(jsonString, User.class);
+					if (user != null) {
+						runOnUiThread(new Runnable() {
+
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
 								LoginActivity.this.onResponse(arg0, arg1);
+							}
+						});
 					}
-				});
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					runOnUiThread(new Runnable() {
+
+						@Override
+						public void run() {
+							Toast.makeText(LoginActivity.this, "数据解析异常", Toast.LENGTH_SHORT).show();
+							progressDialog.dismiss();
+						}
+					});
+				}
 			}
-			
+
 			@Override
 			public void onFailure(Call arg0, IOException arg1) {
 				// TODO Auto-generated method stub
 				LoginActivity.this.onFailure(arg0, arg1);
 			}
-		});				
+		});
 	}
 
-	private void onResponse(Call call, Response response){
+	private void onResponse(Call call, Response response) {
 		progressDialog.dismiss();
 		try {
-			new AlertDialog.Builder(this).setTitle("登录成功").setMessage(response.body().string())
-			.setNegativeButton("确定", null).show();
+			String userAccount = user.getAccount();
+			new AlertDialog.Builder(this).setTitle("登录成功").setMessage("hello!"+userAccount)
+					.setNegativeButton("确定", null).show();
 			Intent itnt = new Intent(this, HelloWorldActivity.class);
 			startActivity(itnt);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			onFailure(call, e);
 		}
 	}
-	
-	
-	private void onFailure(Call arg0, IOException arg1){
+
+	private void onFailure(Call arg0, Exception arg1) {
 		progressDialog.dismiss();
-		new AlertDialog.Builder(this).setTitle("注册失败").setMessage(arg1.getLocalizedMessage())
+		new AlertDialog.Builder(this).setTitle("登录失败").setMessage("")
 				.setNegativeButton("好", null).show();
 	}
-	
+
 	void goRecoverPassword() {
 		Intent itnt = new Intent(this, PasswordRecoverActivity.class);
 		startActivity(itnt);
