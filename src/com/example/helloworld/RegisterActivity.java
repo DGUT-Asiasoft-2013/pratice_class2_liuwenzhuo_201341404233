@@ -119,10 +119,11 @@ public class RegisterActivity extends Activity {
 			requestBodyBuilder.addFormDataPart("avatar", "avatar",
 					RequestBody.create(MediaType.parse("image/png"), fragInputAvatar.getPngData()));
 		}
-		Request request = new Request.Builder().url("http://172.27.165.244:8080/membercenter/api/register")
+		Request request = new Request.Builder().url("http://172.27.0.20:8080/membercenter/api/register")
 				.method("post", null).post(requestBodyBuilder.build()).build();
 
 		client.newCall(request).enqueue(new Callback() {
+			
 
 			@Override
 			public void onResponse(final Call arg0, final Response arg1) throws IOException {
