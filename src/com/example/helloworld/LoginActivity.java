@@ -122,7 +122,7 @@ public class LoginActivity extends Activity {
 
 						@Override
 						public void run() {
-							Toast.makeText(LoginActivity.this, "数据解析异常", Toast.LENGTH_SHORT).show();
+							Toast.makeText(LoginActivity.this, "密码错误", Toast.LENGTH_SHORT).show();
 							progressDialog.dismiss();
 						}
 					});
