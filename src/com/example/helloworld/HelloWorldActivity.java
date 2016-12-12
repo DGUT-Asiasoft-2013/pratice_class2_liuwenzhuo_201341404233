@@ -28,18 +28,13 @@ public class HelloWorldActivity extends Activity {
 		frags = new Fragment[] { contentFeedList, contentNoteList, contentMyProfile, contentSearchPage };
 		tabbar = (MainTabbarFragment) getFragmentManager().findFragmentById(R.id.frag_tabbar);
 		tabbar.setOnTabSelectedListener(new OnTabSelectedListener() {
-			
+
 			@Override
 			public void onTabSelected(int index) {
 				// TODO Auto-generated method stub
 				changeContentFragment(index);
 			}
 		});
-	}
-
-	protected void onResume() {
-		super.onResume();
-
 		tabbar.setSelectedItem(0);
 	}
 
