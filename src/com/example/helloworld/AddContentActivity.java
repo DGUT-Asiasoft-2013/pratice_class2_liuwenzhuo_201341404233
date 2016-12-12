@@ -75,7 +75,6 @@ Article article = null;
 
 							@Override
 							public void run() {
-								// TODO Auto-generated method stub
 								AddContentActivity.this.onResponse(arg0, arg1);
 							}
 						});
