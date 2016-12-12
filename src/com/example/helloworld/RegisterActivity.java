@@ -2,6 +2,7 @@ package com.example.helloworld;
 
 import java.io.IOException;
 
+import com.example.helloworld.entity.Server;
 import com.example.helloworld.entity.User;
 import com.example.helloworld.fragments.inputcells.PictureInputCellFragment;
 import com.example.helloworld.fragments.inputcells.SimpleTextInputCellFragment;
@@ -10,6 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -111,7 +114,7 @@ public class RegisterActivity extends Activity {
 
 		progressDialog.show();
 
-		OkHttpClient client = new OkHttpClient();
+		OkHttpClient client = Server.getSharedClient();
 
 		MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM)
 				.addFormDataPart("account", account).addFormDataPart("name", name).addFormDataPart("email", email)
@@ -121,8 +124,8 @@ public class RegisterActivity extends Activity {
 			requestBodyBuilder.addFormDataPart("avatar", "avatar",
 					RequestBody.create(MediaType.parse("image/png"), fragInputAvatar.getPngData()));
 		}
-		Request request = new Request.Builder().url("http://172.27.0.20:8080/membercenter/api/register")
-				.method("post", null).post(requestBodyBuilder.build()).build();
+		Request request = Server.requestBuilderWithApi("register").method("get", null).post(requestBodyBuilder.build())
+				.build();
 
 		client.newCall(request).enqueue(new Callback() {
 
@@ -172,16 +175,24 @@ public class RegisterActivity extends Activity {
 	private void onResponse(Call call, Response response) {
 		progressDialog.dismiss();
 		try {
-			new AlertDialog.Builder(this).setTitle("请求成功").setMessage(response.body().string())
-					.setNegativeButton("确定", null).show();
-		} catch (IOException e) {
+			new AlertDialog.Builder(this).setTitle("注册成功").setMessage("success!")
+					.setNegativeButton("确定", new OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface arg0, int arg1) {
+							// TODO Auto-generated method stub
+							finish();
+						}
+					}).show();
+
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			onFailure(call, e);
 		}
 	}
 
-	private void onFailure(Call arg0, IOException arg1) {
+	private void onFailure(Call arg0, Exception arg1) {
 		progressDialog.dismiss();
 		new AlertDialog.Builder(this).setTitle("请求失败").setMessage(arg1.getLocalizedMessage())
 				.setNegativeButton("好", null).show();

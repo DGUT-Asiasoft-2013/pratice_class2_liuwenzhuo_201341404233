@@ -2,6 +2,7 @@ package com.example.helloworld;
 
 import java.io.IOException;
 
+import com.example.helloworld.entity.Server;
 import com.example.helloworld.entity.User;
 import com.example.helloworld.fragments.inputcells.SimpleTextInputCellFragment;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -83,13 +86,14 @@ public class LoginActivity extends Activity {
 		String password = fragPassword.getText();
 		progressDialog.show();
 
-		OkHttpClient client = new OkHttpClient();
+		OkHttpClient client = Server.getSharedClient();
 
-		MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM)
-				.addFormDataPart("account", account).addFormDataPart("password", MD5.getMD5(password));
+		MultipartBody requestBody = new MultipartBody.Builder()
+				.addFormDataPart("account", account)
+				.addFormDataPart("password", MD5.getMD5(password))
+				.build();
 
-		Request request = new Request.Builder().url("http://172.27.0.20:8080/membercenter/api/login")
-				.method("get", null).post(requestBodyBuilder.build()).build();
+		Request request = Server.requestBuilderWithApi("login").method("get", null).post(requestBody).build();
 
 		client.newCall(request).enqueue(new Callback() {
 
@@ -138,9 +142,16 @@ public class LoginActivity extends Activity {
 		try {
 			String userAccount = user.getAccount();
 			new AlertDialog.Builder(this).setTitle("登录成功").setMessage("hello!"+userAccount)
-					.setNegativeButton("确定", null).show();
-			Intent itnt = new Intent(this, HelloWorldActivity.class);
-			startActivity(itnt);
+					.setNegativeButton("确定", new OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface arg0, int arg1) {
+							// TODO Auto-generated method stub
+							Intent itnt = new Intent(LoginActivity.this, HelloWorldActivity.class);
+							startActivity(itnt);
+						}
+					}).show();
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
