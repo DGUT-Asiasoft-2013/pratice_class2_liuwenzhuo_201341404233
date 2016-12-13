@@ -3,28 +3,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <ImageView
-        android:id="@+id/ivImg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:src="@drawable/ic_launcher" />
+    <com.example.helloworld.fragments.AvatarView
+        android:id="@+id/avatar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"/>
 
     <TextView
-        android:id="@+id/tvName"
+        android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/ivImg"
+        android:layout_alignTop="@id/avatar"
+        android:layout_marginTop="15dp"
         android:layout_marginLeft="10dp"
-        android:layout_toEndOf="@id/ivImg"
+        android:layout_toEndOf="@id/avatar"
         android:text="hello" />
 
     <TextView
+        android:id="@+id/tvTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/tvName"
-        android:layout_below="@id/tvName"
+        android:layout_alignStart="@id/tvTitle"
+        android:layout_below="@id/tvTitle"
         android:layout_marginTop="10dp"
         android:text="2016-12-8 17:00" />
 
+    <TextView
+        android:id="@+id/tvAuthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/tvTitle"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:text="author"/>
+    
 </RelativeLayout>

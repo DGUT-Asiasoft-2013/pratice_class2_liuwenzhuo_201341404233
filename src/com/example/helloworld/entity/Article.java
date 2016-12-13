@@ -10,6 +10,24 @@ public class Article {
 	Date editDate;
 	String title;
 	String text;
+	private String authorName;
+	private String authorAvatar;
+
+	public String getAuthorName() {
+		return authorName;
+	}
+
+	public void setAuthorName(String authorName) {
+		this.authorName = authorName;
+	}
+
+	public String getAuthorAvatar() {
+		return authorAvatar;
+	}
+
+	public void setAuthorAvatar(String authorAvatar) {
+		this.authorAvatar = authorAvatar;
+	}
 
 	public User getAuthor() {
 		return author;

@@ -84,7 +84,7 @@ public class MyProfileFragment extends Fragment {
 
 	protected void onResponse(Call arg0, User user) {
 		progress.setVisibility(View.GONE);
-		avatar.load(user);
+		avatar.load(user.getAvatar());
 		textView.setVisibility(View.VISIBLE);
 		textView.setTextColor(Color.BLACK);
 		textView.setText("Hello," + user.getName());

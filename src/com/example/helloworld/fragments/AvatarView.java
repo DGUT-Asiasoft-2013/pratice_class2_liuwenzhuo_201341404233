@@ -40,17 +40,20 @@ public class AvatarView extends View {
 	Handler mainThreadHandler = new Handler();;
 	
 	public void setBitmap(Bitmap bmp){
+		if(bmp==null){
+			return;
+		}
 		paint = new Paint();
 		paint.setShader(new BitmapShader(bmp, TileMode.REPEAT, TileMode.REPEAT));
 		radius = Math.min(bmp.getWidth(), bmp.getHeight())/2;
 		invalidate();
 	}
 	
-	public void load(User user){
+	public void load(String authorAvatar){
 		OkHttpClient client = Server.getSharedClient();
 		
 		Request request = new Request.Builder()
-				.url(Server.serverAddress+user.getAvatar())
+				.url(Server.serverAddress+authorAvatar)
 				.method("get", null)
 				.build();
 		
