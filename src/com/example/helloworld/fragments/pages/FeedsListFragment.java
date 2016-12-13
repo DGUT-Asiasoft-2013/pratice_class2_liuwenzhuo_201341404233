@@ -1,29 +1,32 @@
 package com.example.helloworld.fragments.pages;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.ObjectOutputStream.PutField;
 import java.util.List;
 
+import com.example.helloworld.FeedContentActivity;
 import com.example.helloworld.R;
+import com.example.helloworld.RegisterActivity;
 import com.example.helloworld.adapter.FeedListAdapter;
 import com.example.helloworld.entity.Article;
 import com.example.helloworld.entity.Page;
 import com.example.helloworld.entity.Server;
 import com.example.helloworld.fragments.AvatarView;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -37,15 +40,27 @@ public class FeedsListFragment extends Fragment {
 	private Integer page;
 	private List<Article> data;
 	private AvatarView avatar;
+	private TextView loadMore;
+	private int currentPage = -1;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		if (view == null) {
 			view = inflater.inflate(R.layout.fragment_page_feed_list, null);
+			loadMore = (TextView) inflater.inflate(R.layout.listview_loadmore, null);
+			loadMore.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					loadMore();
+				}
+			});
 			listView = (ListView) view.findViewById(R.id.list);
 			listAdapter = new FeedListAdapter(getActivity(), data);
 			listView.setAdapter(listAdapter);
+			listView.addFooterView(loadMore);
 			avatar = (AvatarView) view.findViewById(R.id.avatar);
 			listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -60,14 +75,24 @@ public class FeedsListFragment extends Fragment {
 		return view;
 	}
 
+	private void loadMore() {
+		// TODO Auto-generated method stub
+		loadMore.setText("正在加载中");
+		getList();
+	}
+
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		getList();
+	}
+
+	public void getList() {
 
 		OkHttpClient client = Server.getSharedClient();
 
-		Request request = Server.requestBuilderWithApi("feeds").get().build();
+		Request request = Server.requestBuilderWithApi("feeds/" + (currentPage + 1)).get().build();
 
 		client.newCall(request).enqueue(new Callback() {
 
@@ -75,20 +100,26 @@ public class FeedsListFragment extends Fragment {
 			public void onResponse(Call arg0, Response arg1) throws IOException {
 				// TODO Auto-generated method stub
 				// final String jsonString = arg1.body().string();
-				Page<Article> data = new ObjectMapper().readValue(arg1.body().string(),
+				final Page<Article> data = new ObjectMapper().readValue(arg1.body().string(),
 						new TypeReference<Page<Article>>() {
 						});
 				page = data.getNumber();
-				FeedsListFragment.this.data = data.getContent();
+				if (FeedsListFragment.this.data == null) {
+					FeedsListFragment.this.data = data.getContent();
+				}else{
+					FeedsListFragment.this.data.addAll(data.getContent());
+				}
 				getActivity().runOnUiThread(new Runnable() {
 
 					@Override
 					public void run() {
 						try {
 							// articleList = parseArticleList(jsonString);
-							 listAdapter.setData(FeedsListFragment.this.data);
-							// listAdapter.notifyDataSetChanged();
-							listAdapter.notifyDataSetInvalidated();
+							listAdapter.setData(FeedsListFragment.this.data);
+							 listAdapter.notifyDataSetChanged();
+//							listAdapter.notifyDataSetInvalidated();
+							currentPage = data.getNumber();
+							loadMore.setText("加载更多");
 						} catch (final Exception e) {
 							// TODO Auto-generated catch block
 							// e.printStackTrace();
@@ -98,6 +129,7 @@ public class FeedsListFragment extends Fragment {
 								public void run() {
 									// TODO Auto-generated method stub
 									new AlertDialog.Builder(getActivity()).setMessage(e.getMessage()).show();
+									loadMore.setText("加载更多");
 								}
 							});
 						}
@@ -113,6 +145,7 @@ public class FeedsListFragment extends Fragment {
 					@Override
 					public void run() {
 						new AlertDialog.Builder(getActivity()).setMessage(e.getMessage()).show();
+						loadMore.setText("加载更多");
 					}
 				});
 
@@ -135,6 +168,8 @@ public class FeedsListFragment extends Fragment {
 
 	protected void onItemSelected(int position) {
 		// TODO Auto-generated method stub
-
+		Intent itnt = new Intent(getActivity(), FeedContentActivity.class);
+		itnt.putExtra("article",(Article) listAdapter.getItem(position));
+		startActivity(itnt);
 	}
 }
