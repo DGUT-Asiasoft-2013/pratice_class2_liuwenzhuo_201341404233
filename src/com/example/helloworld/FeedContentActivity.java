@@ -1,5 +1,7 @@
 package com.example.helloworld;
 
+import java.text.SimpleDateFormat;
+
 import com.example.helloworld.entity.Article;
 import com.example.helloworld.fragments.AvatarView;
 
@@ -22,6 +24,7 @@ public class FeedContentActivity extends Activity {
 	private AvatarView avatar;
 	private TextView authorName;
 	private Button btnComment;
+	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,7 @@ public class FeedContentActivity extends Activity {
 		btnComment = (Button) findViewById(R.id.btn_comment);
 
 		tvTitle.setText(article.getTitle());
-		tvTime.setText(new DateFormat().format("yyyy-MM-dd HH:mm", article.getCreateDate()));
+		tvTime.setText(sdf.format(article.getCreateDate()));
 		avatar.load(article.getAuthorAvatar());
 		title.setText(article.getTitle());
 		articleText.setText(article.getText());

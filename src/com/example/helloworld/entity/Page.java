@@ -5,13 +5,13 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Page<Article> {
-		private List<Article> content;
+public class Page<T> {
+		private List<T> content;
 		private Integer number;
-		public List<Article> getContent() {
+		public List<T> getContent() {
 			return content;
 		}
-		public void setContent(List<Article> content) {
+		public void setContent(List<T> content) {
 			this.content = content;
 		}
 		public Integer getNumber() {

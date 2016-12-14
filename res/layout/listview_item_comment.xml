@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.example.helloworld.fragments.AvatarView
+        android:id="@+id/avatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:id="@+id/tvAuthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/avatar"
+       android:layout_toEndOf="@id/avatar"
+        android:text="author"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/tvAuthor"
+        android:layout_below="@id/tvAuthor"
+        android:layout_marginTop="10dp"
+        android:text="2016-12-8 17:00" />
+
+    <TextView 
+        android:id="@+id/tvText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       android:layout_toEndOf="@id/avatar"
+       android:layout_below="@id/tvTime"
+       android:text="评论内容"
+       android:textSize="20sp"/>
+
+</RelativeLayout>
