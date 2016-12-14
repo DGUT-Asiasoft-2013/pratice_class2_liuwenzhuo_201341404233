@@ -59,8 +59,8 @@ public class FeedsListFragment extends Fragment {
 			});
 			listView = (ListView) view.findViewById(R.id.list);
 			listAdapter = new FeedListAdapter(getActivity(), data);
-			listView.setAdapter(listAdapter);
 			listView.addFooterView(loadMore);
+			listView.setAdapter(listAdapter);
 			avatar = (AvatarView) view.findViewById(R.id.avatar);
 			listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -106,7 +106,7 @@ public class FeedsListFragment extends Fragment {
 				page = data.getNumber();
 				if (FeedsListFragment.this.data == null) {
 					FeedsListFragment.this.data = data.getContent();
-				}else{
+				} else {
 					FeedsListFragment.this.data.addAll(data.getContent());
 				}
 				getActivity().runOnUiThread(new Runnable() {
@@ -116,8 +116,8 @@ public class FeedsListFragment extends Fragment {
 						try {
 							// articleList = parseArticleList(jsonString);
 							listAdapter.setData(FeedsListFragment.this.data);
-							 listAdapter.notifyDataSetChanged();
-//							listAdapter.notifyDataSetInvalidated();
+							listAdapter.notifyDataSetChanged();
+							// listAdapter.notifyDataSetInvalidated();
 							currentPage = data.getNumber();
 							loadMore.setText("¼ÓÔØ¸ü¶à");
 						} catch (final Exception e) {
@@ -169,7 +169,7 @@ public class FeedsListFragment extends Fragment {
 	protected void onItemSelected(int position) {
 		// TODO Auto-generated method stub
 		Intent itnt = new Intent(getActivity(), FeedContentActivity.class);
-		itnt.putExtra("article",(Article) listAdapter.getItem(position));
+		itnt.putExtra("article", (Article) listAdapter.getItem(position));
 		startActivity(itnt);
 	}
 }

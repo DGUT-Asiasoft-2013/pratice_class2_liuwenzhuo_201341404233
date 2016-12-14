@@ -30,23 +30,6 @@
         android:text="2016-12-8 17:00" />
 
     <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/avatar"
-        android:gravity="center"
-        android:text="Title"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/articleText"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/title"
-        android:layout_marginTop="10dp" />
-
-    <TextView
         android:id="@+id/tvAuthor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,5 +38,38 @@
         android:layout_marginRight="10dp"
         android:text="author"
         android:textStyle="bold" />
+
+    <LinearLayout 
+        android:layout_below="@id/avatar" 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Title"
+            android:textSize="18sp"
+            android:layout_weight="0.05"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/articleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.92"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btn_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.03"
+            android:layout_gravity="right"
+            android:text="评论" />
+    </LinearLayout>
 
 </RelativeLayout>
