@@ -1,12 +1,10 @@
 package com.example.helloworld.fragments.pages;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream.PutField;
 import java.util.List;
 
 import com.example.helloworld.FeedContentActivity;
 import com.example.helloworld.R;
-import com.example.helloworld.RegisterActivity;
 import com.example.helloworld.adapter.FeedListAdapter;
 import com.example.helloworld.entity.Article;
 import com.example.helloworld.entity.Page;
@@ -71,6 +69,7 @@ public class FeedsListFragment extends Fragment {
 				}
 
 			});
+			getList();
 		}
 		return view;
 	}
@@ -78,13 +77,6 @@ public class FeedsListFragment extends Fragment {
 	private void loadMore() {
 		// TODO Auto-generated method stub
 		loadMore.setText("正在加载中");
-		getList();
-	}
-
-	@Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
 		getList();
 	}
 
@@ -99,11 +91,21 @@ public class FeedsListFragment extends Fragment {
 			@Override
 			public void onResponse(Call arg0, Response arg1) throws IOException {
 				// TODO Auto-generated method stub
-				// final String jsonString = arg1.body().string();
-				final Page<Article> data = new ObjectMapper().readValue(arg1.body().string(),
-						new TypeReference<Page<Article>>() {
-						});
+				final String jsonString = arg1.body().string();
+				final Page<Article> data = new ObjectMapper().readValue(jsonString, new TypeReference<Page<Article>>() {
+				});
 				page = data.getNumber();
+				 if(data.getContent().size()==0){
+					 getActivity().runOnUiThread(new Runnable() {
+						
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							loadMore.setText("加载完毕");
+						}
+					});
+				 return;
+				 }
 				if (FeedsListFragment.this.data == null) {
 					FeedsListFragment.this.data = data.getContent();
 				} else {
@@ -129,7 +131,7 @@ public class FeedsListFragment extends Fragment {
 								public void run() {
 									// TODO Auto-generated method stub
 									new AlertDialog.Builder(getActivity()).setMessage(e.getMessage()).show();
-									loadMore.setText("加载更多");
+									loadMore.setText("fuck");
 								}
 							});
 						}
@@ -145,7 +147,7 @@ public class FeedsListFragment extends Fragment {
 					@Override
 					public void run() {
 						new AlertDialog.Builder(getActivity()).setMessage(e.getMessage()).show();
-						loadMore.setText("加载更多");
+						loadMore.setText("加载失败");
 					}
 				});
 
