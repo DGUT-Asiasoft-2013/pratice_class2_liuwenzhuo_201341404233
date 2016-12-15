@@ -2,6 +2,8 @@ package com.example.helloworld.fragments.pages;
 
 import java.io.IOException;
 
+import com.example.helloworld.LoginActivity;
+import com.example.helloworld.PasswordRecoverActivity;
 import com.example.helloworld.R;
 import com.example.helloworld.entity.Server;
 import com.example.helloworld.entity.User;
@@ -9,11 +11,14 @@ import com.example.helloworld.fragments.AvatarView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import okhttp3.Call;
@@ -28,6 +33,8 @@ public class MyProfileFragment extends Fragment {
 	TextView textView;
 	ProgressBar progress;
 	AvatarView avatar;
+	private Button btnExit;
+	private Button btnUpdatePwd;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,9 +43,56 @@ public class MyProfileFragment extends Fragment {
 			textView = (TextView) view.findViewById(R.id.text);
 			progress = (ProgressBar) view.findViewById(R.id.progress);
 			avatar = (AvatarView) view.findViewById(R.id.avatar);
+			btnExit = (Button) view.findViewById(R.id.btn_exit);
+			btnUpdatePwd = (Button) view.findViewById(R.id.btn_update_pwd);
+			btnExit.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					exit();
+				}
+			});
+			btnUpdatePwd.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					updatePwd();
+				}
+			});
 		}
 
 		return view;
+	}
+
+	private void updatePwd() {
+		// TODO Auto-generated method stub
+		Intent itnt = new Intent(getActivity(),PasswordRecoverActivity.class);
+		startActivity(itnt);
+	}
+
+	private void exit() {
+		// TODO Auto-generated method stub
+		OkHttpClient client= Server.getSharedClient();
+		
+		Request request = Server.requestBuilderWithApi("exit").build();
+		
+		client.newCall(request).enqueue(new Callback() {
+			
+			@Override
+			public void onResponse(Call arg0, Response arg1) throws IOException {
+				// TODO Auto-generated method stub
+				Intent itnt = new Intent(getActivity(),LoginActivity.class);
+				startActivity(itnt);
+			}
+			
+			@Override
+			public void onFailure(Call arg0, IOException arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 
 	@Override
