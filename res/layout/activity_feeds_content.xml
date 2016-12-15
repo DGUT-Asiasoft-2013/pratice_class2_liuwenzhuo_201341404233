@@ -39,20 +39,20 @@
         android:text="author"
         android:textStyle="bold" />
 
-    <LinearLayout 
-        android:layout_below="@id/avatar" 
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_below="@id/avatar"
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_weight="0.05"
             android:gravity="center"
             android:text="Title"
             android:textSize="18sp"
-            android:layout_weight="0.05"
             android:textStyle="bold" />
 
         <TextView
@@ -63,13 +63,45 @@
             android:layout_weight="0.85"
             android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/btn_comment"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.1"
-            android:layout_gravity="right"
-            android:text="评论" />
+            android:layout_weight="0.1" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                android:text="点赞数量："
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvCountLike"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                android:text="数字"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btn_like"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:text=" 点赞" />
+
+            <Button
+                android:id="@+id/btn_comment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:layout_weight="0.2"
+                android:text="评论" />
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>
